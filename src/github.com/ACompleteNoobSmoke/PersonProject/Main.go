@@ -101,15 +101,15 @@ func fileHandling(jsonValue []byte) {
 	}
 }
 
-//FindPerson creates a map format and returns the marshalled person you are searching for
-func FindPerson(found *Person) ([]byte, error) {
+//findPerson creates a map format and returns the marshalled person you are searching for
+func findPerson(found *Person) ([]byte, error) {
 	find := make(map[string]*Person)
 	find[found.Name] = found
 	return json.MarshalIndent(find, "", " ")
 }
 
-//GetPerson looks for the person you are searching for
-func GetPerson(w http.ResponseWriter, r *http.Request) {
+//getPerson looks for the person you are searching for
+func getPerson(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	if r.Method == "GET" {
@@ -123,7 +123,7 @@ func GetPerson(w http.ResponseWriter, r *http.Request) {
 
 		for _, item := range p {
 			if item.Name == search {
-				jsonValue, _ := FindPerson(item)
+				jsonValue, _ := findPerson(item)
 				fmt.Fprintf(w, string(jsonValue))
 				return
 			}
@@ -137,7 +137,7 @@ func GetPerson(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	http.HandleFunc("/people", peopleRequest)
-	http.HandleFunc("/people/", GetPerson)
+	http.HandleFunc("/people/", getPerson)
 	http.HandleFunc("/people/exit", exitProgram)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
