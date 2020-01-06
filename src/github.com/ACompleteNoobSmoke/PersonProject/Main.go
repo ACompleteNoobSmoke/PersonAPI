@@ -120,15 +120,15 @@ func GetPerson(w http.ResponseWriter, r *http.Request) {
 		}
 		s := strings.Split(u.Path, "/")
 		search := s[2]
-		if len(s) <= 3 {
-			for _, item := range p {
-				if item.Name == search {
-					jsonValue, _ := FindPerson(item)
-					fmt.Fprintf(w, string(jsonValue))
-					return
-				}
+
+		for _, item := range p {
+			if item.Name == search {
+				jsonValue, _ := FindPerson(item)
+				fmt.Fprintf(w, string(jsonValue))
+				return
 			}
 		}
+
 		fmt.Fprintf(w, "Person Does Not Exist")
 	} else {
 		fmt.Fprintf(w, "Incorrect Method")
